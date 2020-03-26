@@ -1,7 +1,7 @@
-# # # # sol2
+# # # # sol3
 # The MIT License (MIT)
 #
-# Copyright (c) 2013-2018 Rapptz, ThePhD, and contributors
+# Copyright (c) 2013-2019 Rapptz, ThePhD, and contributors
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -28,7 +28,7 @@ include(Common/Core)
 if (Catch_FIND_VERSION)
 	set(catch_version ${Catch_FIND_VERSION})
 else()
-	set(catch_version 2.1.2)
+	set(catch_version 2.11.1)
 endif()
 
 set(catch_lib catch_lib_${catch_version})
@@ -70,8 +70,8 @@ add_library(${catch_lib} INTERFACE)
 target_include_directories(${catch_lib} INTERFACE ${catch_include_dirs})
 
 if (MSVC)
-	target_compile_options(${catch_lib} INTERFACE
-		/D_SILENCE_CXX17_UNCAUGHT_EXCEPTION_DEPRECATION_WARNING)
+	target_compile_definitions(${catch_lib} INTERFACE
+		_SILENCE_CXX17_UNCAUGHT_EXCEPTION_DEPRECATION_WARNING)
 endif()
 
 set(CATCH_FOUND TRUE)
