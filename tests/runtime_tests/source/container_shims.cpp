@@ -139,16 +139,24 @@ struct my_vec : public std::vector<int> {
 
 namespace sol {
 	template <>
-	struct is_container<my_vec> : std::true_type {};
+	struct is_container<my_vec> : std::true_type { };
 
 	template <>
 	struct usertype_container<my_vec> {
+		// Hooks Lua's syntax for #c
+		static int size(lua_State* L) {
+			my_vec& v = sol::stack::get<my_vec&>(L, 1);
+			return stack::push(L, v.size());
+		}
+
+		// Used by default implementation
 		static auto begin(lua_State*, my_vec& self) {
 			return self.begin();
 		}
 		static auto end(lua_State*, my_vec& self) {
 			return self.end();
 		}
+
 		static std::ptrdiff_t index_adjustment(lua_State*, my_vec&) {
 			return 0;
 		}
@@ -202,7 +210,7 @@ TEST_CASE("containers/custom indexing", "allow containers to set a custom indexi
 	sol::state lua;
 	lua.open_libraries(sol::lib::base);
 
-	lua["c"] = my_vec{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+	lua["c"] = my_vec { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
 	auto result1 = lua.safe_script("for i=0,9 do assert(i == c[i]) end", sol::script_pass_on_error);
 	REQUIRE(result1.valid());
@@ -210,6 +218,8 @@ TEST_CASE("containers/custom indexing", "allow containers to set a custom indexi
 	REQUIRE(result2.valid());
 	auto result3 = lua.safe_script("assert(c[-1] == nil)", sol::script_pass_on_error);
 	REQUIRE(result3.valid());
+	auto result4 = lua.safe_script("assert(#c == 10)", sol::script_pass_on_error);
+	REQUIRE(result4.valid());
 }
 
 TEST_CASE("containers/containers of pointers", "containers of pointers shouldn't have their value_type's overly stripped") {
