@@ -170,7 +170,12 @@ namespace function_detail {
 		typedef std::remove_pointer_t<std::decay_t<Function>> function_type;
 		typedef lua_bind_traits<function_type> traits_type;
 
+#if defined(_MSC_VER) && _MSC_VER == 1927
+		// https://github.com/ThePhD/sol2/issues/1008
+		static int real_call(lua_State* L) {
+#else
 		static int real_call(lua_State* L) noexcept(traits_type::is_noexcept) {
+#endif
 			// Layout:
 			// idx 1...n: verbatim data of member variable pointer
 			function_type& memfx = stack::get<user<function_type>>(L, upvalue_index(2));
