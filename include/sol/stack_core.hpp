@@ -43,6 +43,7 @@
 #include <algorithm>
 #include <sstream>
 #include <optional>
+#include <limits>
 
 namespace sol {
 	namespace detail {
