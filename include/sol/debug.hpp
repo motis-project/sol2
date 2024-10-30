@@ -1,8 +1,8 @@
-// sol3 
+// sol2
 
 // The MIT License (MIT)
 
-// Copyright (c) 2013-2019 Rapptz, ThePhD and contributors
+// Copyright (c) 2013-2022 Rapptz, ThePhD and contributors
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in
@@ -24,12 +24,10 @@
 #ifndef SOL_DEBUG_HPP
 #define SOL_DEBUG_HPP
 
-#include "stack.hpp"
+#include <sol/stack.hpp>
 #include <iostream>
 
-namespace sol {
-namespace detail {
-namespace debug {
+namespace sol { namespace detail { namespace debug {
 	inline std::string dump_types(lua_State* L) {
 		std::string visual;
 		std::size_t size = lua_gettop(L) + 1;
@@ -49,8 +47,6 @@ namespace debug {
 	inline void print_section(const std::string& message, lua_State* L) {
 		std::cout << "-- " << message << " -- [ " << dump_types(L) << " ]" << std::endl;
 	}
-}
-}
-} // namespace sol::detail::debug
+}}} // namespace sol::detail::debug
 
 #endif // SOL_DEBUG_HPP
